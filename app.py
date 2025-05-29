@@ -5,7 +5,7 @@ from functools import wraps
 import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # 適宜変更してください
+app.secret_key = 'sakuta'  # 適宜変更してください
 
 DATABASE = 'database.db'
 
