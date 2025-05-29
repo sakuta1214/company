@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # 適宜変更してください
@@ -57,6 +58,7 @@ def home_redirect():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    now = datetime.datetime.now()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -69,7 +71,7 @@ def login():
             return redirect(url_for('employee_list'))
         else:
             flash('ユーザー名かパスワードが間違っています。')
-    return render_template('login.html')
+    return render_template('login.html', now=now)
 
 @app.route('/logout')
 def logout():
@@ -79,14 +81,16 @@ def logout():
 @app.route('/employees')
 @login_required
 def employee_list():
+    now = datetime.datetime.now()
     conn = get_db_connection()
     employees = conn.execute('SELECT * FROM employees').fetchall()
     conn.close()
-    return render_template('employees/list.html', employees=employees)
+    return render_template('employees/list.html', employees=employees, now=now)
 
 @app.route('/employees/new', methods=['GET', 'POST'])
 @login_required
 def employee_new():
+    now = datetime.datetime.now()
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -99,11 +103,12 @@ def employee_new():
         conn.close()
         flash('社員を登録しました。')
         return redirect(url_for('employee_list'))
-    return render_template('employees/new.html')
+    return render_template('employees/new.html', now=now)
 
 @app.route('/employees/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def employee_edit(id):
+    now = datetime.datetime.now()
     conn = get_db_connection()
     employee = conn.execute('SELECT * FROM employees WHERE id = ?', (id,)).fetchone()
     if not employee:
@@ -122,11 +127,12 @@ def employee_edit(id):
         flash('社員情報を更新しました。')
         return redirect(url_for('employee_list'))
     conn.close()
-    return render_template('employees/edit.html', employee=employee)
+    return render_template('employees/edit.html', employee=employee, now=now)
 
 @app.route('/employees/delete/<int:id>', methods=['POST'])
 @login_required
 def employee_delete(id):
+    now = datetime.datetime.now()
     conn = get_db_connection()
     conn.execute('DELETE FROM employees WHERE id = ?', (id,))
     conn.commit()
@@ -137,6 +143,7 @@ def employee_delete(id):
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    now = datetime.datetime.now()
     if request.method == 'POST':
         current_pw = request.form['current_password']
         new_pw = request.form['new_password']
@@ -159,24 +166,32 @@ def change_password():
         conn.close()
         flash('パスワードを変更しました。')
         return redirect(url_for('employee_list'))
-    return render_template('change_password.html')
+    return render_template('change_password.html', now=now)
 
 @app.route('/company')
 def company_home():
-    return render_template('company/home.html')
+    now = datetime.datetime.now()
+    return render_template('company/home.html', now=now)
 
 @app.route('/company/about')
 def company_about():
-    return render_template('company/about.html')
+    now = datetime.datetime.now()
+    return render_template('company/about.html', now=now)
 
 @app.route('/company/services')
 def company_services():
-    return render_template('company/services.html')
+    now = datetime.datetime.now()
+    return render_template('company/services.html', now=now)
 
 @app.route('/company/contact')
 def company_contact():
-    # GETのみでフォーム表示のみ、POSTはFormspreeが処理するため削除
-    return render_template('company/contact.html')
+    now = datetime.datetime.now()
+    return render_template('company/contact.html', now=now)
+
+@app.route('/company/recruit')
+def company_recruit():
+    now = datetime.datetime.now()
+    return render_template('company/recruit.html', now=now)
 
 if __name__ == '__main__':
     app.run(debug=True)

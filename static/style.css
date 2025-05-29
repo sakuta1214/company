@@ -1,88 +1,239 @@
 /* 会社ホームページ用装飾 */
 
+/* body要素に対するスタイル */
 body {
+  /* Tailwind CSSのInterフォント指定と競合するが、従来のCSSとして記述 */
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: #f0f2f5; /* 背景色をライトグレーに設定 */
+  color: #333; /* テキストの色を濃いグレーに設定 */
+  margin: 0; /* bodyのデフォルトマージンをリセット */
+  line-height: 1.6; /* 行の高さを設定 */
 }
 
+/* header要素とfooter要素に対する共通スタイル */
 header, footer {
-  background-color: #004080;
-  color: white;
-  padding: 15px 0;
-  text-align: center;
+  background-color: #004080; /* 背景色を濃い青に設定 */
+  color: white; /* テキストの色を白に設定 */
+  padding: 15px 0; /* 上下15pxのパディング（内側の余白）を設定。左右のパディングは0 */
+  text-align: center; /* テキストを中央揃えにする */
 }
 
+/* ナビゲーションリンクのコンテナ */
+nav ul {
+  list-style: none; /* リストのマーカーをなくす */
+  padding: 0; /* デフォルトのパディングをリセット */
+  margin: 0; /* デフォルトのマージンをリセット */
+  display: flex; /* フレックスボックスレイアウトを適用 */
+  justify-content: center; /* 項目を中央揃えにする */
+  flex-wrap: wrap; /* 項目が収まらない場合に折り返す */
+}
+
+nav li {
+  margin: 0 10px; /* リスト項目間のマージンを設定 */
+}
+
+/* nav要素内の<a>タグ（リンク）に対するスタイル */
 nav a {
-  color: white;
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
+  color: white; /* テキストの色を白に設定 */
+  text-decoration: none; /* 下線をなくす */
+  font-weight: bold; /* フォントを太字にする */
+  padding: 8px 12px; /* リンクのパディング */
+  display: block; /* ブロック要素として表示し、パディングを適用可能にする */
+  border-radius: 4px; /* 角を丸くする */
+  transition: background-color 0.3s ease; /* 背景色の変化にアニメーションを適用 */
 }
 
+/* nav要素内の<a>タグにマウスカーソルが乗った時のスタイル */
 nav a:hover {
-  text-decoration: underline;
+  background-color: #0050A0; /* ホバー時の背景色をやや明るい青に設定 */
+  text-decoration: none; /* ホバー時も下線は表示しない（Tailwindのunderlineと競合しないように） */
 }
 
+/* コンテンツを囲むcontainerクラスに対するスタイル */
 .container {
-  max-width: 900px;
-  margin: 20px auto;
-  background: white;
-  padding: 30px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 8px;
+  max-width: 900px; /* 最大幅を900ピクセルに設定 */
+  margin: 20px auto; /* 上下に20pxのマージン、左右は自動（中央揃え） */
+  background: white; /* 背景色を白に設定 */
+  padding: 30px; /* 内側の余白を30pxに設定 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 影をつける */
+  border-radius: 8px; /* 角を丸くする（半径8px） */
 }
 
+/* h1要素とh2要素に対する共通スタイル */
 h1, h2 {
-  color: #004080;
+  color: #004080; /* テキストの色を濃い青に設定 */
+  margin-bottom: 20px; /* 下に20pxのマージン */
 }
 
+/* h1要素の追加スタイル */
+h1 {
+  font-size: 2.5em; /* フォントサイズを大きくする */
+  text-align: center; /* 中央揃え */
+}
+
+/* h2要素の追加スタイル */
+h2 {
+  font-size: 2em; /* フォントサイズを大きくする */
+}
+
+/* ul要素（順序なしリスト）に対するスタイル */
 ul {
-  list-style-type: disc;
-  margin-left: 20px;
+  list-style-type: disc; /* リストのマーカーを黒丸にする */
+  margin-left: 20px; /* 左側に20pxのマージンを設定 */
+  padding: 0; /* デフォルトのパディングをリセット */
 }
 
+/* リストアイテムのスタイル */
+ul li {
+  margin-bottom: 8px; /* リストアイテム間のマージン */
+}
+
+/* form要素内のlabel要素に対するスタイル */
 form label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
+  display: block; /* 要素をブロックレベルにする */
+  margin-top: 15px; /* 上に15pxのマージンを設定 */
+  margin-bottom: 5px; /* 下に5pxのマージン */
+  font-weight: bold; /* フォントを太字にする */
+  color: #555; /* ラベルの色をやや濃いグレーに */
 }
 
+/* form要素内のinput要素、textarea要素に対する共通スタイル */
 form input[type="text"],
 form input[type="email"],
+form input[type="password"], /* パスワード入力欄も追加 */
 form textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
+  width: 100%; /* 幅を親要素いっぱいに広げる */
+  padding: 10px; /* 内側の余白を10pxに設定 */
+  border: 1px solid #ccc; /* 1ピクセルの実線で灰色(#ccc)のボーダーを設定 */
+  border-radius: 4px; /* 角を丸くする（半径4px） */
+  box-sizing: border-box; /* パディングとボーダーを幅に含める */
+  font-size: 1em; /* フォントサイズ */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* フォーカス時のアニメーション */
 }
 
-form textarea {
-  min-height: 100px;
+/* フォーカス時の入力欄のスタイル */
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form textarea:focus {
+  border-color: #0066cc; /* ボーダーの色を青に */
+  box-shadow: 0 0 5px rgba(0, 102, 204, 0.5); /* 影を追加 */
+  outline: none; /* デフォルトのアウトラインを削除 */
 }
 
+/* textarea要素に対する追加スタイル */
+form textarea {
+  min-height: 120px; /* 最小の高さを120ピクセルに設定 */
+  resize: vertical; /* 縦方向のリサイズを可能にする */
+}
+
+/* form要素内のbutton要素に対するスタイル */
 form button {
-  margin-top: 20px;
-  background-color: #004080;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  margin-top: 20px; /* 上に20pxのマージンを設定 */
+  background-color: #004080; /* 背景色を濃い青に設定 */
+  color: white; /* テキストの色を白に設定 */
+  border: none; /* ボーダーをなくす */
+  padding: 12px 25px; /* 上下12px、左右25pxのパディングを設定 */
+  border-radius: 5px; /* 角を丸くする（半径5px） */
+  cursor: pointer; /* マウスカーソルを指の形にする */
+  font-size: 16px; /* フォントサイズを16ピクセルに設定 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* ホバー時のアニメーション */
 }
 
+/* form要素内のbutton要素にマウスカーソルが乗った時のスタイル */
 form button:hover {
-  background-color: #0066cc;
+  background-color: #0066cc; /* 背景色をやや明るい青に設定 */
+  transform: translateY(-2px); /* 少し上に移動するアニメーション */
 }
 
+/* メッセージ表示用のスタイル（フラッシュメッセージなど） */
 .message {
   margin-top: 20px;
   padding: 15px;
   border-radius: 5px;
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: #d4edda; /* 薄い緑の背景 */
+  color: #155724; /* 濃い緑のテキスト */
+  border: 1px solid #c3e6cb; /* 緑のボーダー */
+  text-align: center; /* テキストを中央揃え */
+}
+
+/* エラーメッセージ用のスタイル */
+.message.error {
+  background-color: #f8d7da; /* 薄い赤の背景 */
+  color: #721c24; /* 濃い赤のテキスト */
+  border-color: #f5c6cb; /* 赤のボーダー */
+}
+
+/* テーブルの基本的なスタイル */
+table {
+  width: 100%;
+  border-collapse: collapse; /* ボーダーを結合 */
+  margin-top: 20px;
+}
+
+table th, table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd; /* 薄いグレーのボーダー */
+  text-align: left;
+}
+
+table th {
+  background-color: #f2f2f2; /* ヘッダーの背景色 */
+  font-weight: bold;
+  color: #555;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9; /* 偶数行の背景色 */
+}
+
+table tr:hover {
+  background-color: #f0f0f0; /* ホバー時の行の背景色 */
+}
+
+/* リンクボタン風のスタイル */
+.button-link {
+  display: inline-block;
+  background-color: #004080;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.button-link:hover {
+  background-color: #0066cc;
+}
+
+/* レスポンシブデザインの調整 */
+@media (max-width: 768px) {
+  .container {
+    margin: 10px auto;
+    padding: 15px;
+  }
+
+  nav ul {
+    flex-direction: column; /* 小さい画面では縦並びにする */
+    align-items: center; /* 中央揃え */
+  }
+
+  nav li {
+    margin: 5px 0; /* 縦並び時のマージン */
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto; /* テーブルが画面からはみ出る場合にスクロール可能にする */
+    white-space: nowrap; /* セル内のテキストを折り返さない */
+  }
 }

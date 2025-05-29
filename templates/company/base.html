@@ -1,28 +1,43 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{% block title %}会社ホームページ{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}会社名{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-  <header>
-    <h1>〇〇株式会社</h1>
-    <nav>
-      <a href="{{ url_for('company_home') }}">ホーム</a>
-      <a href="{{ url_for('company_about') }}">会社概要</a>
-      <a href="{{ url_for('company_services') }}">サービス</a>
-      <a href="{{ url_for('company_contact') }}">お問い合わせ</a>
-    </nav>
-  </header>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <header class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-lg font-semibold">会社名</h1>
+            <nav class="mt-4 md:mt-0">
+                <ul class="flex flex-wrap justify-center space-x-4 md:space-x-6">
+                    <li><a href="{{ url_for('company_home') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">ホーム</a></li>
+                    <li><a href="{{ url_for('company_about') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">会社概要</a></li>
+                    <li><a href="{{ url_for('company_services') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">サービス</a></li>
+                    <li><a href="{{ url_for('company_contact') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">お問い合わせ</a></li>
+                    <li><a href="{{ url_for('company_recruit') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">採用情報</a></li>
+                    {% if 'user_id' in session %}
+                        <li><a href="{{ url_for('employee_list') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">社員管理</a></li>
+                        <li><a href="{{ url_for('change_password') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">パスワード変更</a></li>
+                        <li><a href="{{ url_for('logout') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">ログアウト ({{ session.username }})</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="text-white hover:underline font-semibold rounded-md px-3 py-1 hover:bg-blue-700 transition duration-300">ログイン</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+    <main class="container mx-auto py-8 flex-grow">
+        {% block content %}{% endblock %}
+    </main>
 
-  <footer>
-    <p>© 2025 〇〇株式会社</p>
-  </footer>
+    <footer class="bg-blue-800 text-white p-4 mt-auto shadow-md">
+        <div class="container mx-auto text-center text-sm">
+            &copy; {{ now.year }} 会社名. All rights reserved.
+        </div>
+    </footer>
 </body>
 </html>
