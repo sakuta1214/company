@@ -3,10 +3,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps
 import datetime
+import os
 
 app = Flask(__name__)
-app.secret_key = 'sakuta'  # 適宜変更してください
-
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
 DATABASE = 'database.db'
 
 def get_db_connection():
@@ -29,7 +29,8 @@ def init_db():
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL
+        password_hash TEXT NOT NULL,
+        is_admin INTEGER DEFAULT 0
     )
     ''')
     cur.execute('''
@@ -43,11 +44,18 @@ def init_db():
     ''')
     conn.commit()
 
-    user = conn.execute('SELECT * FROM users WHERE username = ?', ('admin',)).fetchone()
-    if not user:
-        password_hash = generate_password_hash('admin123')
-        conn.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', ('admin', password_hash))
-        conn.commit()
+    admin_username = os.environ.get('ADMIN_USERNAME')
+    admin_password = os.environ.get('ADMIN_PASSWORD')
+
+    if admin_username and admin_password:
+        admin_user = conn.execute('SELECT * FROM users WHERE username = ?', (admin_username,)).fetchone()
+        if not admin_user:
+            password_hash = generate_password_hash(admin_password)
+            conn.execute('INSERT INTO users (username, password_hash, is_admin) VALUES (?, ?, ?)',
+                         (admin_username, password_hash, 1))
+            conn.commit()
+            print(f"管理者アカウント '{admin_username}' を作成しました。")
+
     conn.close()
 
 init_db()
@@ -77,6 +85,27 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('home_redirect'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    now = datetime.datetime.now()
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = get_db_connection()
+        existing_user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        if existing_user:
+            conn.close()
+            flash('そのユーザー名はすでに登録されています。')
+            return render_template('register.html', now=now)
+
+        password_hash = generate_password_hash(password)
+        conn.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', (username, password_hash))
+        conn.commit()
+        conn.close()
+        flash('登録が完了しました。ログインしてください。')
+        return redirect(url_for('login'))
+    return render_template('register.html', now=now)
 
 @app.route('/employees')
 @login_required
