@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}社員新規登録{% endblock %}
+
+{% block content %}
+<h2>社員新規登録</h2>
+<form method="POST" class="w-50 mx-auto">
+  <div class="mb-3">
+    <label for="name" class="form-label">名前</label>
+    <input type="text" class="form-control" id="name" name="name" required />
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">メール</label>
+    <input type="email" class="form-control" id="email" name="email" required />
+  </div>
+  <div class="mb-3">
+    <label for="department" class="form-label">部署</label>
+    <input type="text" class="form-control" id="department" name="department" required />
+  </div>
+  <div class="mb-3">
+    <label for="position" class="form-label">役職</label>
+    <input type="text" class="form-control" id="position" name="position" required />
+  </div>
+  <button type="submit" class="btn btn-success">登録</button>
+  <a href="{{ url_for('employee_list') }}" class="btn btn-secondary">キャンセル</a>
+</form>
+{% endblock %}

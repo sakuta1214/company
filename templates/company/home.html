@@ -1,0 +1,11 @@
+{% extends 'company/base.html' %}
+
+{% block title %}ホーム{% endblock %}
+
+{% block content %}
+<div class="text-center">
+  <h1>ようこそ 会社名 へ</h1>
+  <p>私たちはお客様の満足を第一に考えたサービスを提供します。</p>
+  <img src="{{ url_for('static', filename='company_photo.jpg') }}" class="img-fluid" alt="会社イメージ" />
+</div>
+{% endblock %}
