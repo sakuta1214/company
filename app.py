@@ -5,9 +5,10 @@ from functools import wraps
 import datetime
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
-DATABASE = 'database.db'
+DATABASE = os.path.join(app.instance_path, 'database.db')
+INIT_FLAG_FILE = os.path.join(app.instance_path, 'init_done.flag')
 
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
@@ -23,6 +24,10 @@ def login_required(f):
     return decorated_function
 
 def init_db():
+    if os.path.exists(INIT_FLAG_FILE):
+        print("データベースはすでに初期化済みです。")
+        return
+
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute('''
@@ -57,8 +62,12 @@ def init_db():
             print(f"管理者アカウント '{admin_username}' を作成しました。")
 
     conn.close()
+    with open(INIT_FLAG_FILE, 'w') as f:
+        f.write("initialized")
+    print("データベースの初期化が完了しました。")
 
-init_db()
+with app.app_context():
+    init_db()
 
 @app.route('/')
 def home_redirect():
@@ -223,4 +232,7 @@ def company_recruit():
     return render_template('company/recruit.html', now=now)
 
 if __name__ == '__main__':
+    # instanceフォルダが存在しない場合は作成
+    if not os.path.exists(app.instance_path):
+        os.makedirs(app.instance_path)
     app.run(debug=True)
