@@ -5,9 +5,9 @@ from functools import wraps
 import datetime
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
-DATABASE = 'database.db'
+DATABASE = os.path.join(app.instance_path, 'database.db')
 
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
@@ -58,7 +58,8 @@ def init_db():
 
     conn.close()
 
-init_db()
+with app.app_context():
+    init_db()
 
 @app.route('/')
 def home_redirect():
@@ -223,4 +224,7 @@ def company_recruit():
     return render_template('company/recruit.html', now=now)
 
 if __name__ == '__main__':
+    # instanceフォルダが存在しない場合は作成
+    if not os.path.exists(app.instance_path):
+        os.makedirs(app.instance_path)
     app.run(debug=True)
