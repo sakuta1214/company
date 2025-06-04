@@ -8,10 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # アプリ初期化
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+app.secret_key = os.environ.get('SECRET_KEY', '1214')
 
 # PostgreSQL接続設定（Renderでは DATABASE_URL を環境変数で設定）
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('postgresql://sakuta:arEMpq5FyiksM7lkrzTG94pcUYLKjLkG@dpg-d0vt682li9vc73d7v5og-a.oregon-postgres.render.com/company_zb3v')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
